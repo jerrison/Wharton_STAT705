@@ -1,0 +1,173 @@
+#### STAT 405/705 FALL 2018 ASSIGNMENT 1
+#### NAME:
+
+#### If in a question I refer to a function that we have not seen in class, 
+#### then use the help facility in R to find out about it.
+#### Insert your answers and the R code you used to generate it, beneath each question.
+#### Even though for some questions you could find the answer "by inspection", for this  homework you need
+#### to write code to get the answers.
+
+#### **** I M P O R T A N T ****
+#### Submit your solutions to Canvas as a plain text file with  a ".txt" file extention.
+
+
+# My birthday is September 2nd, 1994 (I wish).
+# Using the convention MMDDYYYY, then my birthday number is
+# 09021994
+
+#### Q1. 
+
+#a Store your birthday number into a variable called "bday"
+
+# Now find and print
+#b The fourth root of your birthday number
+
+#c The log base 10 of your birthday number
+
+#d The modulus of your birthday number, base 27
+
+#e The sum of the first 10 cube numbers: 1,8,27,..., 1000 
+
+
+
+#### Q2. 
+
+#  Create the two vectors of numbers alpha = (1000,970,940, ...,520)
+#                                    beta  = (50,60,70, ..., 210)  
+
+#a What is the sum of the element-wise product of the two vectors?
+
+#b What is the maximum value in the vector containing the element-wise products?
+
+#c What is/are the indices (position in the vector) of the maximum value found in part b?
+
+#d How many of the elements of the element-wise product vector are strictly less than 75000?
+
+
+#### Q3.
+#a  Set the random number seed as your birthday number
+
+#b Create two vectors of exponential random variables, each of length 100000.
+#  Create the first vector with the rate parameter equal to 2, and the second vector
+#  with the rate parameter equal to 1. 
+
+#c Create a third vector containing the element-wise proportion of the first variable to the sum of the two variables.  
+
+#d Extract and store from the first vector, only those values for which
+#  the element-wise proportion is strictly greater than 0.5.  
+
+#e Print the mean of these specific elements of the first vector. 
+
+
+#### Q4. 
+#a  Enter the following 5 x 5 matrix into R
+####     (0 0 0 0 1 
+####      0 0 0 1 1
+####      0 0 1 2 1
+####      0 1 3 3 1
+          1 4 6 4 1)
+####     Label  the rows as A, B, C, D and E and the columns as Alpha, Beta, Gamma, Delta and Epsilon.
+
+#b  Print the matrix in R and paste the printed output below
+
+#c  Extract and print the submatrix corresponding to the second and fourth rows,
+#   and the fifth column. Make sure that what you extract is indeed a matrix.
+
+#d  Find and print the inverse of the matrix used in part a.  
+
+
+#### Q5. The Wharton MBA program used to  have a grading scheme that went:
+#### DS (Distinguished), HP (High Pass), P (Pass), F (Fail)
+#### A professor collected anticipated grades in a course from 75 students.
+#### The data was recorded numerically, 1 = DS, 2 = HP, 3 = P, 4 = F)
+#### Here's the raw data.
+
+# 2, 1, 2, 3, 1, 3, 2, 2, 2, 1, 3, 1, 3, 3, 2, 
+# 1, 2, 1, 2, 3, 3, 2, 1, 2, 2, 3, 3, 2, 3, 1, 
+# 1, 2, 4, 1, 3, 3, 2, 1, 2, 2, 1, 1, 3, 2, 2, 
+# 1, 2, 2, 3, 2, 2, 1, 2, 3, 3, 2, 3, 3, 1, 2, 
+# 3, 3, 3, 1, 1, 2, 4, 1, 2, 1, 2, 2, 3, 2, 2 
+
+#a  Create and store an ordered factor variable from the raw data with the letter grades as labels.
+#   Fail should be the lowest value and DS the highest value. 
+
+#b  Summarize the data with the "table" command and paste the output below.
+
+#c   Which grade was most often reported?
+
+
+#aside: you can use the table as input to the "pie" function which makes a pie chart.
+
+
+#### Q6. Here are two vectors:
+x <- c(
+ 0.00, 0.25, 0.50, 0.75, 1.00, 1.25, 1.50,
+ 1.75, 2.00, 2.25, 2.50, 2.75, 3.00, 3.25, 3.50,
+ 3.75, 4.00, 4.25, 4.50, 4.75, 5.00, 5.25, 5.50, 5.75, 6.00, 6.25)
+
+
+y <- c(
+  0.00,  0.25,  0.48,  0.68,  0.84,  0.95,  
+  1.00,  0.98,  0.91,  0.78,  0.60,  0.38,
+  0.14, -0.11, -0.35, -0.57, -0.76, -0.89,
+ -0.98, -1.00, -0.96, -0.86, -0.71, -0.51,
+ -0.28, -0.03)
+
+# Just looking at the numbers, what is the relationship between x and y?
+# No points for this one, because it is rather hard.
+
+#a By visualizing the data using the "plot" function, what is the relationship between x and y?
+
+
+#### Q7. 
+
+#a What is a key difference between the list extraction operators [ and $?
+
+#b Reset the random number seed to your birthday seed.
+
+# Paste the following code into R
+
+my.list <- list(G = c(rnorm(10)), H = matrix(rnorm(100),ncol=10), 
+                GAMMA = list(ALPHA = matrix(rnorm(81),ncol=9), BETA = matrix(rnorm(81),ncol=9)))
+
+#c Write code to extract and print the value of the (3,7) element in the H matrix.
+ 
+#d Write code to extract and find the sum of all of the elements in the 
+#  matrix product (%*%) of the two matrices ALPHA and BETA.
+
+#e Rename the element called "G", as "Y", and paste both the command you used 
+#  and the output from the names() command to prove that you did it successfully.   
+
+
+#### Q8. 
+
+#a Set the random number seed to your birthday number again.
+
+#b Create a 1000 x 225 matrix of standard normals (mean = 0, sd = 1).
+
+#c Using the apply function, find the mean of each row of the matrix
+
+#d Find and report the standard deviation (R command "sd") of these 1000 row means
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
