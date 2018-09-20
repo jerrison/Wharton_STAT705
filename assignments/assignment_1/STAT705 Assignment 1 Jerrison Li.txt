@@ -155,8 +155,8 @@ grades <- factor(x = c(2, 1, 2, 3, 1, 3, 2, 2, 2, 1, 3, 1, 3, 3, 2,
 #b  Summarize the data with the "table" command and paste the output below.
 # Answer:
 # grades
-# DS HP  P  F 
-# 20 31 22  2 
+#  F  P HP DS 
+#  2 22 31 20 
 print(table(grades))
 
 #c   Which grade was most often reported?
@@ -164,6 +164,7 @@ print(table(grades))
 which.max(table(grades))
 
 #aside: you can use the table as input to the "pie" function which makes a pie chart.
+pie(table(grades))
 
 #### Q6. Here are two vectors:
 x <- c(0.00, 0.25, 0.50, 0.75, 1.00, 1.25,
@@ -205,7 +206,7 @@ my.list <- list(G = c(rnorm(10)), H = matrix(rnorm(100),ncol=10),
 
 #c Write code to extract and print the value of the (3,7) element in the H 
 # matrix.
-# Answer: 0.3442928
+# Answer: 1.273985
 print(my.list$H[3,7])
  
 #d Write code to extract and find the sum of all of the elements in the 
@@ -220,7 +221,6 @@ print(sum(my.list$GAMMA$ALPHA %*% my.list$GAMMA$BETA))
 names(my.list)[1] <- "Y"
 print(names(my.list))
 
-
 #### Q8. 
 
 #a Set the random number seed to your birthday number again.
@@ -230,12 +230,13 @@ set.seed(bday)
 matrix2 <- matrix(data = c(rnorm(n = 1000*225, mean = 0, sd = 1)),
                   nrow = 1000,
                   ncol = 225,
+                  byrow = TRUE
                   )
 
 #c Using the apply function, find the mean of each row of the matrix
 row_means = apply(X = matrix2, MARGIN = 1, FUN = mean)
 
 #d Find and report the standard deviation (R command "sd") of these 1000 row means
-# Answer: 0.06495613
+# Answer: 0.0664032
 print(sd(x = row_means))
 
