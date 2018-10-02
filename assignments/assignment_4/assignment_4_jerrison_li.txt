@@ -1,0 +1,573 @@
+
+#### STAT 705 FALL 2018 ASSIGNMENT 4 (Iteration)
+#### NAME: Jerrison Li
+
+#### If in a question I refer to a function that we have not seen in class, 
+#### then use the help facility to find out about it.
+#### Insert your answers under each question.
+#### Submit your solutions to Canvas as a plain text file.
+#### The file "hw4_2018.Rdata" contains the objects you need to do these 
+#### questions. 
+
+# Q1. (14pts.) The probability of a "player advantage" signal in a card 
+# counting system.
+# The card counting system does not care about the cards' suit 
+# (hearts/clubs/diamonds/spades), 
+# only their values
+
+#### Use the playing cards generated in class:
+CARDS <- paste(
+rep(c("ACE","2","3","4","5","6","7","8","9","10","J","Q","K"),rep(4,13)),
+rep(c("H","C","D","S"),13),sep="_")
+
+# and the "sample" command to shuffle the deck of cards.
+# Set the random number seed to your birthday number. 
+
+birthday_seed = 19900601
+set.seed(birthday_seed)
+my.deck <- sample(CARDS)
+
+#The "map" that takes the card value to its count is
+
+#{ACE => -1, 
+# 2   => +0.5,  %>% 
+# 3   => +1, 
+# 4   => +1, 
+# 5   => +1.5, 
+# 6   => +1, 
+# 7   => +0.5, 
+# 8   =>  0, 
+# 9   => -0.5,
+#10   => -1,
+# J   => -1,
+# Q   => -1,
+# K   => -1}
+
+# Here are the card values in a vector
+cardvalues <- c("ACE","2","3","4","5","6","7","8","9","10","J","Q","K")
+# Here are the card counts in a vector
+cardcounts <- c(-1,0.5,1,1,1.5,1,0.5,0,-0.5,-1,-1,-1,-1)
+
+#a. Replace the card representation with the card value
+#   For example "ACE_H" becomes "ACE", "2_S" becomes "2", "8_H" becomes "8".
+#   Use the "gsub" function to do this. Hint: you can match anything after the
+# "_" character with the ".*" construct.
+
+# Paste your substitution code and show that it works with the my.deck shuffled 
+# deck:
+
+# Code:
+# print("Deck before replacement:")
+# print(my.deck)
+
+# my.deck <- gsub(pattern = "_.*", replacement = "", x = my.deck, ignore.case = TRUE)
+
+# print("Deck after replacement:")
+# print(my.deck)
+
+# Output:
+# [1] "Deck before replacement:"
+#  [1] "6_S"   "10_H"  "6_D"   "7_C"   "3_C"   "J_D"   "ACE_H" "2_S"   "ACE_D"
+# [10] "ACE_C" "Q_S"   "J_H"   "5_S"   "K_S"   "7_H"   "K_C"   "9_S"   "7_S"  
+# [19] "3_H"   "8_H"   "8_C"   "4_S"   "K_H"   "10_S"  "7_D"   "9_C"   "9_D"  
+# [28] "2_D"   "Q_H"   "10_D"  "4_C"   "4_D"   "4_H"   "8_S"   "3_D"   "6_H"  
+# [37] "K_D"   "5_H"   "2_C"   "10_C"  "6_C"   "5_D"   "2_H"   "J_C"   "9_H"  
+# [46] "5_C"   "Q_C"   "8_D"   "3_S"   "Q_D"   "J_S"   "ACE_S"
+# [1] "Deck after replacement:"
+#  [1] "6"   "10"  "6"   "7"   "3"   "J"   "ACE" "2"   "ACE" "ACE" "Q"   "J"  
+# [13] "5"   "K"   "7"   "K"   "9"   "7"   "3"   "8"   "8"   "4"   "K"   "10" 
+# [25] "7"   "9"   "9"   "2"   "Q"   "10"  "4"   "4"   "4"   "8"   "3"   "6"  
+# [37] "K"   "5"   "2"   "10"  "6"   "5"   "2"   "J"   "9"   "5"   "Q"   "8"  
+# [49] "3"   "Q"   "J"   "ACE"
+
+
+print("Deck before replacement:")
+print(my.deck)
+
+my.deck <- gsub(pattern = "_.*", replacement = "", x = my.deck, ignore.case = TRUE)
+
+print("Deck after replacement:")
+print(my.deck)
+
+#b. Replace the card values from part 1a with their "counts". The "match" command is very useful to 
+# achieve this.
+#   The two vectors, cardvalues and cardcounts defined above will also help. 
+
+#   Paste your code that maps the card values to their counts (no for loops accepted)
+
+# Code:
+# print("Deck before count replacement:")
+# print(my.deck)
+
+# my.deck <- cardcounts[match(x = my.deck, table = cardvalues)]
+
+# print("Deck after count replacement:")
+# print(my.deck)
+
+# Output:
+# [1] "Deck before count replacement:"
+#  [1] "6"   "10"  "6"   "7"   "3"   "J"   "ACE" "2"   "ACE" "ACE" "Q"   "J"  
+# [13] "5"   "K"   "7"   "K"   "9"   "7"   "3"   "8"   "8"   "4"   "K"   "10" 
+# [25] "7"   "9"   "9"   "2"   "Q"   "10"  "4"   "4"   "4"   "8"   "3"   "6"  
+# [37] "K"   "5"   "2"   "10"  "6"   "5"   "2"   "J"   "9"   "5"   "Q"   "8"  
+# [49] "3"   "Q"   "J"   "ACE"
+# [1] "Deck after count replacement:"
+#  [1]  1.0 -1.0  1.0  0.5  1.0 -1.0 -1.0  0.5 -1.0 -1.0 -1.0 -1.0  1.5 -1.0  0.5
+# [16] -1.0 -0.5  0.5  1.0  0.0  0.0  1.0 -1.0 -1.0  0.5 -0.5 -0.5  0.5 -1.0 -1.0
+# [31]  1.0  1.0  1.0  0.0  1.0  1.0 -1.0  1.5  0.5 -1.0  1.0  1.5  0.5 -1.0 -0.5
+# [46]  1.5 -1.0  0.0  1.0 -1.0 -1.0 -1.0
+
+print("Deck before count replacement:")
+print(my.deck)
+
+my.deck <- cardcounts[match(x = my.deck, table = cardvalues)]
+
+print("Deck after count replacement:")
+print(my.deck)
+
+#c. Reset the random number seed to your birthday number here and paste the code you used to do it.
+#   For a card counting system to be useful in practice, it needs to be able to
+#   generate "player advantage" signals reasonably frequently. If it only generates an "advantage" 
+#   signal once every 1000 shuffled decks, it will not be very useful in practice.
+#
+#   Define an "advantage" signal happening if the cumulative card count in the deck rises strictly 
+#   above 5.
+#   Use a Monte Carlo simulation with a replication size of 1,000,000, to estimate the probability 
+#   that a
+#   randomly shuffled card deck generates an "advantage" signal within the first 30 played cards.
+#   Between each iteration make sure you re-shuffle the deck.
+#   You will find the command "cumsum" very helpful in this task. "cumsum" calculates a cumulative 
+#   sum of a vector
+#   which is exactly what the cumulative card count is.
+#
+#   Cut and paste your code that performs the Monte Carlo together with the final estimated 
+#   probability.
+
+# Code:
+# set.seed(birthday_seed)
+# num.its <- 1000000
+# counter <- 0
+
+# for(i in 1:num.its) {
+#     new_deck <- 
+#     if(any(cumsum(sample(x = my.deck))[1:30] > 5)) {
+#         counter = counter + 1
+#     }
+# }
+
+# print(paste("The estimated probability is: ", counter / num.its)
+
+# Output:
+# [1] "The estimated probability is:  0.184668"
+
+set.seed(birthday_seed)
+num.its <- 1000000
+counter <- 0
+
+for (i in 1:num.its) {
+    my.deck <- sample(x = CARDS, replace = FALSE)
+    if(sum(cumsum(cardcounts[match(gsub("_.*","",my.deck),cardvalues)])[1:30] > 5) > 0) { 
+    counter <- counter + 1
+  }
+}
+
+print(paste("The estimated probability is: ", counter / num.its))
+
+# Q2. (20 pts.) Data manipulations. Use the "new.outpatient" data frame 
+# included in the .Rdata file 
+# to answer parts a and b, and the "behavior.df" (which you will recreate, 
+# slide 29, class 8) data frame to answer parts c and d. 
+# You can modify the code that is available on the class 8 slides, to help 
+# rebuild the behavior.df.
+  
+#   For parts a through d, paste the R code that you wrote to answer each 
+#   question as well as the answer/output itself.
+
+#a. In which month were the most number of appointments scheduled (use the 
+# SchedDate column). 
+#   You will need to extract the month from the POSIXlt data structure.
+
+# Code: 
+# hw4_data <- load(file = paste0("/Users/jerrison/Wharton_MBA/Wharton_STAT_705/", 
+#                                "data/hw4_2018.rdata"))
+
+# new.outpatient$Month <- as.POSIXlt(new.outpatient$SchedDate)$mon + 1
+
+# print(sort(x = table(new.outpatient$Month), decreasing = TRUE)[1])
+
+# Output:
+#   8 
+# 250 
+
+# Answer:
+# The month with the most number of appointments was August with 250 
+# appointments.
+
+hw4_data <- load(file = paste0("/Users/jerrison/Wharton_MBA/Wharton_STAT_705/", 
+                               "data/hw4_2018.rdata"))
+
+new.outpatient$Month <- as.POSIXlt(new.outpatient$SchedDate)$mon + 1
+
+print(sort(x = table(new.outpatient$Month), decreasing = TRUE)[1])
+
+#b. In which Department is the No Show rate in the new.outpatient data frame
+#  the lowest? 
+
+# Code:
+# no_show_by_dept <- table(new.outpatient$Status,new.outpatient$Dept)["No Show", ] / 
+# (table(new.outpatient$Status,new.outpatient$Dept)["Arrived",] +
+# table(new.outpatient$Status,new.outpatient$Dept)["No Show",])
+
+# sort(no_show_by_dept)[1]
+
+# Output:
+# TRAUMA: 0.115942028985507
+
+# Answer:
+# The TRAUMA department had the lowest no show rate
+
+no_show_by_dept <- table(new.outpatient$Status,new.outpatient$Dept)["No Show", ] / 
+(table(new.outpatient$Status,new.outpatient$Dept)["Arrived",] +
+table(new.outpatient$Status,new.outpatient$Dept)["No Show",])
+
+sort(no_show_by_dept)[1]
+
+#c. Which patient(s) has seen the most number of different specialities?
+#   Use the "Dept" variable and include the most recent visit in the count.
+#   How many different specialities did they see and in how many visits? 
+#   (I suggest you modify the "extract.hist" function from slide 26, class 8 
+#   adding a new variable Num.Specialties)
+
+# Code:
+# num.pats <- length(unique(new.outpatient$PID))
+# behavior.df <- data.frame(
+#     PID = as.character(rep(NA,num.pats)),
+#     Sex = rep(NA,num.pats),
+#     Age = rep(NA,num.pats),
+#     Prior.Visits = rep(NA,num.pats),
+#     No.Show.Rate = rep(NA,num.pats),
+#     Current.Visit.Lag = rep(NA,num.pats),
+#     Current.Visit.Status = as.character(rep(NA,num.pats)),
+#     num_specialties = rep(NA,num.pats),
+#     stringsAsFactors = FALSE #Stop the use of factors, keep as characters
+# )
+
+# extract.hist <- function(df){ 
+#     Specialties <- length(unique(df$Dept))
+#     # Special case: there is a single record, no history
+#     if(nrow(df) == 1){
+#         return(data.frame(
+#             PID = as.character(df[1,"PID"]),
+#             Sex = df[1,"Sex"],
+#             Age = df[1,"Age"],
+#             Prior.Visits = 0, #No prior visits
+#             No.Show.Rate = NA, #Undefined prior no show rate
+#             Current.Visit.Lag = df[1,"SchedLag"],
+#             Current.Visit.Status = as.character(df[1,"Status"]),
+#             num_specialties = Specialties,
+#             stringsAsFactors = FALSE #Stop the use of factors
+#         )
+#               )
+#     }
+#   # The rest of the code will only be executed if the if failed
+#     prior.visits <- nrow(df) - 1 
+#     prop.no.show <- (
+#         sum(
+#             df[-nrow(df),"Status"]
+#             == "No Show") 
+#         / prior.visits 
+#     )
+#     last.row.num <- nrow(df)
+#     return(data.frame(
+#         PID = as.character(df[last.row.num,"PID"]),
+#         Sex = df[last.row.num,"Sex"],
+#         Age = df[last.row.num,"Age"],
+#         Prior.Visits = prior.visits, #We just calculated this 
+#         No.Show.Rate = prop.no.show, #We just calculated this 
+#         Current.Visit.Lag = df[last.row.num,"SchedLag"],
+#         Current.Visit.Status = as.character(df[last.row.num,"Status"]),
+#         num_specialties = Specialties,
+#         stringsAsFactors = FALSE #Stop the use of factors
+#     )
+#           )
+# }
+
+# row.counter <- 1 #start by filling the first row
+# for(pid in unique(new.outpatient$PID)){ #iterate over id's
+#     behavior.df[row.counter, ] <- extract.hist(df = # Pull out history
+#                                                new.outpatient[new.outpatient$PID == pid,])
+#     row.counter <- row.counter + 1 # Increment the row counter by 1
+# }
+
+# behavior.df[behavior.df$num_specialties == max(behavior.df$num_specialties), ]
+
+# Output:
+# 	PID	Sex	Age	Prior.Visits	No.Show.Rate	Current.Visit.Lag	Current.Visit.Status	num_specialties
+# 309	P10337	1	62	8	0.1250000	4	Arrived	5
+# 575	P10636	2	72	7	0.2857143	25	Arrived	5
+# 825	P10932	1	50	22	0.4090909	33	No Show	5
+# 883	P10998	2	58	25	0.4000000	8	Arrived	5
+
+
+# Answer:
+# Patients P10337, P10636, P10932, P10998 have seen the most number of
+# different specialities with 5, and with 9, 8, 23 and 26 visits respectively
+
+num.pats <- length(unique(new.outpatient$PID))
+behavior.df <- data.frame(
+    PID = as.character(rep(NA,num.pats)),
+    Sex = rep(NA,num.pats),
+    Age = rep(NA,num.pats),
+    Prior.Visits = rep(NA,num.pats),
+    No.Show.Rate = rep(NA,num.pats),
+    Current.Visit.Lag = rep(NA,num.pats),
+    Current.Visit.Status = as.character(rep(NA,num.pats)),
+    num_specialties = rep(NA,num.pats),
+    stringsAsFactors = FALSE #Stop the use of factors, keep as characters
+)
+
+extract.hist <- function(df){ 
+    Specialties <- length(unique(df$Dept))
+    # Special case: there is a single record, no history
+    if(nrow(df) == 1){
+        return(data.frame(
+            PID = as.character(df[1,"PID"]),
+            Sex = df[1,"Sex"],
+            Age = df[1,"Age"],
+            Prior.Visits = 0, #No prior visits
+            No.Show.Rate = NA, #Undefined prior no show rate
+            Current.Visit.Lag = df[1,"SchedLag"],
+            Current.Visit.Status = as.character(df[1,"Status"]),
+            num_specialties = Specialties,
+            stringsAsFactors = FALSE #Stop the use of factors
+        )
+              )
+    }
+  # The rest of the code will only be executed if the if failed
+    prior.visits <- nrow(df) - 1 
+    prop.no.show <- (
+        sum(
+            df[-nrow(df),"Status"]
+            == "No Show") 
+        / prior.visits 
+    )
+    last.row.num <- nrow(df)
+    return(data.frame(
+        PID = as.character(df[last.row.num,"PID"]),
+        Sex = df[last.row.num,"Sex"],
+        Age = df[last.row.num,"Age"],
+        Prior.Visits = prior.visits, #We just calculated this 
+        No.Show.Rate = prop.no.show, #We just calculated this 
+        Current.Visit.Lag = df[last.row.num,"SchedLag"],
+        Current.Visit.Status = as.character(df[last.row.num,"Status"]),
+        num_specialties = Specialties,
+        stringsAsFactors = FALSE #Stop the use of factors
+    )
+          )
+}
+
+row.counter <- 1 #start by filling the first row
+for(pid in unique(new.outpatient$PID)){ #iterate over id's
+    behavior.df[row.counter, ] <- extract.hist(df = # Pull out history
+                                               new.outpatient[new.outpatient$PID == pid,])
+    row.counter <- row.counter + 1 # Increment the row counter by 1
+}
+
+behavior.df[behavior.df$num_specialties == max(behavior.df$num_specialties), ]
+
+#d. Of those patients that had a prior no-show rate of above 40%, what 
+#   proportion were men, and what proportion were women? 
+#   Compare this to the sex proportion for all patients, irrespective of 
+#   no-show rate. 
+#   In the numeric representation of the Sex variable, 1 is Female and 2 Male. 
+
+# Code:
+# no_shows_total <- subset(x = behavior.df, No.Show.Rate > 0.4)
+# no_shows_f <- subset(x = behavior.df, No.Show.Rate > 0.4 & Sex == 1)
+# no_shows_m <- subset(x = behavior.df, No.Show.Rate > 0.4 & Sex == 2)
+# all_f <- subset(x = behavior.df, Sex == 1)
+# all_m <- subset(x = behavior.df, Sex == 2)
+
+# print(paste0("Male no show > 40% proportion: ",
+#              nrow(no_shows_m)/nrow(no_shows_total)))
+
+# print(paste0("Female no show > 40% proportion: ",
+#              nrow(no_shows_f)/nrow(no_shows_total)))
+
+# print(paste0("Male proportion: ",
+#              nrow(all_m)/nrow(behavior.df)))
+
+# print(paste0("Female proportion: ",
+#              nrow(all_f)/nrow(behavior.df)))
+
+# Output:
+# [1] "Male no show > 40% proportion: 0.426829268292683"
+# [1] "Female no show > 40% proportion: 0.573170731707317"
+# [1] "Male proportion: 0.465536723163842"
+# [1] "Female proportion: 0.534463276836158"
+
+# Answer: Male proportion for no shows higher than 40% was 0.426829268292683
+# compared to 0.465536723163842 for all patients. Female proportion for patients
+# with a no show ratio higher than 40% was 0.573170731707317 compared to
+# 0.534463276836158 for all patients.
+
+no_shows_total <- subset(x = behavior.df, No.Show.Rate > 0.4)
+no_shows_f <- subset(x = behavior.df, No.Show.Rate > 0.4 & Sex == 1)
+no_shows_m <- subset(x = behavior.df, No.Show.Rate > 0.4 & Sex == 2)
+all_f <- subset(x = behavior.df, Sex == 1)
+all_m <- subset(x = behavior.df, Sex == 2)
+
+print(paste0("Male no show > 40% proportion: ",
+             nrow(no_shows_m)/nrow(no_shows_total)))
+
+print(paste0("Female no show > 40% proportion: ",
+             nrow(no_shows_f)/nrow(no_shows_total)))
+
+print(paste0("Male proportion: ",
+             nrow(all_m)/nrow(behavior.df)))
+
+print(paste0("Female proportion: ",
+             nrow(all_f)/nrow(behavior.df)))
+
+
+# Q3. (16 pts.) Influence of pairs of points on a regression, aka "masking". For loops. 
+# Use the tsla.ret.df data frame which is included in the "hw4_2018.Rdata" file to answer this question.
+# Paste the R code that you write to answer each part as well as the answer itself.
+
+#a. Run the simple regression of the TSLA (y) return against the S&P500 return
+# (x) and report the R-squared from the regression.
+
+# Code:
+# lm.out <- lm(formula = TSLA.Return ~ SP.Return, data = tsla.ret.df)
+# reg.summary <- summary(lm.out)
+
+# print(reg.summary$r.squared)
+
+# Output:
+# [1] 0.160639
+
+# Answer:
+# The R-squared from the regression is 0.160639
+
+lm.out <- lm(formula = TSLA.Return ~ SP.Return, data = tsla.ret.df)
+reg.summary <- summary(lm.out)
+
+print(reg.summary$r.squared)
+
+#b. Create an empty matrix, populated with NAs,  of size n x n, where n is the
+# number of rows in the TSLA data set. 
+#   Give the matrix both row and column names corresponding to the dates in the
+# Date column of the tsla.ret.df data frame.
+
+# Code:
+# tsla_matrix <- matrix(nrow = nrow(tsla.ret.df),
+#                       ncol = nrow(tsla.ret.df))
+
+# colnames(tsla_matrix) <- tsla.ret.df$Date
+# rownames(tsla_matrix) <- tsla.ret.df$Date
+
+# head(tsla_matrix)
+
+# Output:
+# 	9/5/2017	9/6/2017	9/7/2017	9/8/2017	9/11/2017	9/12/2017	9/13/2017	9/14/2017	9/15/2017	9/18/2017	⋯	8/20/2018	8/21/2018	8/22/2018	8/23/2018	8/24/2018	8/27/2018	8/28/2018	8/29/2018	8/30/2018	8/31/2018
+# 9/5/2017	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	⋯	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+# 9/6/2017	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	⋯	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+# 9/7/2017	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	⋯	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+# 9/8/2017	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	⋯	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+# 9/11/2017	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	⋯	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+# 9/12/2017	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	⋯	NA	NA	NA	NA
+
+
+tsla_matrix <- matrix(nrow = nrow(tsla.ret.df),
+                      ncol = nrow(tsla.ret.df))
+
+colnames(tsla_matrix) <- tsla.ret.df$Date
+rownames(tsla_matrix) <- tsla.ret.df$Date
+
+head(tsla_matrix)
+
+#c. Remove every possible pair of points in turn from the dataset and rerun the
+# regression each time. 
+#   Every time you rerun the regression
+#   save the new R-squared into the matrix you created in part b. Hint: the 
+# subset command to lm will be useful here.
+
+# Code:
+# for (i in 1:nrow(tsla.ret.df)) { 
+#     for (j in 1:nrow(tsla.ret.df)) { 
+#         lm.out <- lm(formula = TSLA.Return ~ SP.Return,
+#                      data = tsla.ret.df,
+#                      subset = -c(i,j))
+#         r_squared <- summary(lm.out)$r.squared
+#         tsla_matrix[i,j] <- r_squared
+#   }
+# }
+# head(tsla_matrix)
+
+# Output:
+# 	9/5/2017	9/6/2017	9/7/2017	9/8/2017	9/11/2017	9/12/2017	9/13/2017	9/14/2017	9/15/2017	9/18/2017	⋯	8/20/2018	8/21/2018	8/22/2018	8/23/2018	8/24/2018	8/27/2018	8/28/2018	8/29/2018	8/30/2018	8/31/2018
+# 9/5/2017	0.1596899	0.1603923	0.1601521	0.1594271	0.1549664	0.1598593	0.1597524	0.1612476	0.1596347	0.1596913	⋯	0.1595557	0.1603033	0.1596929	0.1596113	0.1593969	0.1613503	0.1599507	0.1618425	0.1595663	0.1596728
+# 9/6/2017	0.1603923	0.1613469	0.1618010	0.1610959	0.1566041	0.1615206	0.1614043	0.1628946	0.1612891	0.1613418	⋯	0.1612084	0.1619476	0.1613494	0.1612692	0.1610536	0.1630266	0.1616245	0.1635263	0.1612234	0.1613322
+# 9/7/2017	0.1601521	0.1618010	0.1610960	0.1608418	0.1563555	0.1612630	0.1611569	0.1626581	0.1610381	0.1610944	⋯	0.1609577	0.1617096	0.1611005	0.1610214	0.1607944	0.1627551	0.1613654	0.1632546	0.1609806	0.1610807
+# 9/8/2017	0.1594271	0.1610959	0.1608418	0.1603855	0.1556573	0.1605578	0.1604447	0.1619344	0.1603290	0.1603830	⋯	0.1602492	0.1609907	0.1603879	0.1603068	0.1600934	0.1620561	0.1606563	0.1625524	0.1602602	0.1603697
+# 9/11/2017	0.1549664	0.1566041	0.1563555	0.1556573	0.1559044	0.1560658	0.1559602	0.1574391	0.1558422	0.1558946	⋯	0.1557590	0.1564783	0.1559103	0.1558337	0.1555861	0.1575370	0.1561764	0.1580425	0.1557930	0.1558912
+# 9/12/2017	0.1598593	0.1615206	0.1612630	0.1605578	0.1560658	0.1608088	0.1608665	0.1623546	0.1607507	0.1608036	⋯	0.1606699	0.1614067	0.1608120	0.1607324	0.1605126	0.1624790
+
+for (i in 1:nrow(tsla.ret.df)) { 
+    for (j in 1:nrow(tsla.ret.df)) { 
+        lm.out <- lm(formula = TSLA.Return ~ SP.Return,
+                     data = tsla.ret.df,
+                     subset = -c(i,j))
+        r_squared <- summary(lm.out)$r.squared
+        tsla_matrix[i,j] <- r_squared
+  }
+}
+
+head(tsla_matrix)
+
+#d. Create a new matrix which calculates the difference between the R-squared 
+# you calculated in part a, and the
+#   matrix in part c. Call this matrix "diff.rsquared".  
+
+# Code:
+# diff.rsquared <- reg.summary$r.squared - tsla_matrix
+
+# head(diff.rsquared)
+
+# Output:
+# 9/5/2017	9/6/2017	9/7/2017	9/8/2017	9/11/2017	9/12/2017	9/13/2017	9/14/2017	9/15/2017	9/18/2017	⋯	8/20/2018	8/21/2018	8/22/2018	8/23/2018	8/24/2018	8/27/2018	8/28/2018	8/29/2018	8/30/2018	8/31/2018
+# 9/5/2017	0.0009490679	0.0002467479	0.0004869167	1.211918e-03	0.005672624	7.797314e-04	0.0008866420	-0.0006086289	0.0010043260	0.0009477142	⋯	1.083347e-03	0.0003356832	0.0009460785	1.027694e-03	0.0012421551	-0.0007113113	6.882926e-04	-0.001203506	1.072716e-03	0.0009661781
+# 9/6/2017	0.0002467479	-0.0007078651	-0.0011619483	-4.568471e-04	0.004034947	-8.815549e-04	-0.0007653127	-0.0022556157	-0.0006501294	-0.0007027451	⋯	-5.694318e-04	-0.0013085853	-0.0007104305	-6.301435e-04	-0.0004146383	-0.0023875923	-9.854814e-04	-0.002887268	-5.843598e-04	-0.0006931929
+# 9/7/2017	0.0004869167	-0.0011619483	-0.0004570054	-2.027670e-04	0.004283534	-6.239656e-04	-0.0005179054	-0.0020191059	-0.0003990751	-0.0004554371	⋯	-3.186548e-04	-0.0010706221	-0.0004615344	-3.824216e-04	-0.0001553506	-0.0021161304	-7.263929e-04	-0.002615582	-3.416046e-04	-0.0004416534
+# 9/8/2017	0.0012119176	-0.0004568471	-0.0002027670	2.535490e-04	0.004981748	8.124822e-05	0.0001942639	-0.0012954249	0.0003100005	0.0002560014	⋯	3.898354e-04	-0.0003517259	0.0002511262	3.322326e-04	0.0005456436	-0.0014171059	-1.727889e-05	-0.001913390	3.788422e-04	0.0002692652
+# 9/11/2017	0.0056726236	0.0040349474	0.0042835341	4.981748e-03	0.004734640	4.573201e-03	0.0046788091	0.0031998750	0.0047968367	0.0047444356	⋯	4.879990e-03	0.0041607048	0.0047287583	4.805270e-03	0.0050529454	0.0031019894	4.462570e-03	0.002596529	4.845991e-03	0.0047477727
+# 9/12/2017	0.0007797314	-0.0008815549	-0.0006239656	8.124822e-05	0.004573201	-1.697791e-04	-0.0002274521	-0.0017156393	-0.0001116628	-0.0001646364	
+
+diff.rsquared <- reg.summary$r.squared - tsla_matrix
+
+head(diff.rsquared)
+
+#e. Which pair of data points' removal makes R-squared decrease the most from 
+# the baseline in part a? 
+#   Using the "arr.ind = TRUE, useNames = TRUE" arguments to the "which" 
+# function is one approach to this question.
+#   Don't be surprised if the biggest drop in R-squared isn't that much!
+
+# Code:
+# which(diff.rsquared == max(abs(diff.rsquared)), arr.ind = TRUE, useNames = TRUE)
+
+# Output:
+# row	col
+# 3/27/2018	141	109
+# 2/8/2018	109	141
+
+
+# Answer:
+# The pair of points 3/27/2018 and 2/8/2018 removal makes R-square decrease the
+# most
+
+which(diff.rsquared == max(abs(diff.rsquared)), 
+      arr.ind = TRUE,
+      useNames = TRUE)
+
+

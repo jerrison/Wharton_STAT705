@@ -1,0 +1,131 @@
+#### STAT 705 FALL 2018 ASSIGNMENT 4 (Iteration)
+#### NAME:
+
+#### If in a question I refer to a function that we have not seen in class, 
+#### then use the help facility to find out about it.
+#### Insert your answers under each question.
+#### Submit your solutions to Canvas as a plain text file.
+#### The file "hw4_2018.Rdata" contains the objects you need to do these questions. 
+
+# Q1. (14pts.) The probability of a "player advantage" signal in a card counting system.
+# The card counting system does not care about the cards' suit (hearts/clubs/diamonds/spades), 
+# only their values
+
+#### Use the playing cards generated in class:
+CARDS <- paste(
+rep(c("ACE","2","3","4","5","6","7","8","9","10","J","Q","K"),rep(4,13)),
+rep(c("H","C","D","S"),13),sep="_")
+
+# and the "sample" command to shuffle the deck of cards.
+# Set the random number seed to your birthday number. 
+set.seed(19940902)
+my.deck <- sample(CARDS)
+
+#The "map" that takes the card value to its count is
+
+#{ACE => -1, 
+# 2   => +0.5, 
+# 3   => +1, 
+# 4   => +1, 
+# 5   => +1.5, 
+# 6   => +1, 
+# 7   => +0.5, 
+# 8   =>  0, 
+# 9   => -0.5,
+#10   => -1,
+# J   => -1,
+# Q   => -1,
+# K   => -1}
+
+# Here are the card values in a vector
+cardvalues <- c("ACE","2","3","4","5","6","7","8","9","10","J","Q","K")
+# Here are the card counts in a vector
+cardcounts <- c(-1,0.5,1,1,1.5,1,0.5,0,-0.5,-1,-1,-1,-1)
+
+#a. Replace the card representation with the card value
+#   For example "ACE_H" becomes "ACE", "2_S" becomes "2", "8_H" becomes "8".
+#   Use the "gsub" function to do this. Hint: you can match anything after the "_" character with the ".*" construct.
+
+# Paste your substitution code and show that it works with the my.deck shuffled deck:
+
+
+#b. Replace the card values from part 1a with their "counts". The "match" command is very useful to achieve this.
+#   The two vectors, cardvalues and cardcounts defined above will also help. 
+
+#   Paste your code that maps the card values to their counts (no for loops accepted)
+
+#c. Reset the random number seed to your birthday number here and paste the code you used to do it.
+#   For a card counting system to be useful in practice, it needs to be able to
+#   generate "player advantage" signals reasonably frequently. If it only generates an "advantage" signal
+#   once every 1000 shuffled decks, it will not be very useful in practice.
+#
+#   Define an "advantage" signal happening if the cumulative card count in the deck rises strictly above 5.
+#   Use a Monte Carlo simulation with a replication size of 1,000,000, to estimate the probability that a
+#   randomly shuffled card deck generates an "advantage" signal within the first 30 played cards.
+#   Between each iteration make sure you re-shuffle the deck.
+#   You will find the command "cumsum" very helpful in this task. "cumsum" calculates a cumulative sum of a vector
+#   which is exactly what the cumulative card count is.
+#
+#   Cut and paste your code that performs the Monte Carlo together with the final estimated probability.
+  
+
+
+# Q2. (20 pts.) Data manipulations. Use the "new.outpatient" data frame included in the .Rdata file 
+# to answer parts a and b, and the "behavior.df" (which you will recreate, slide 29, class 8) data frame to answer parts c and d. 
+# You can modify the code that is available on the class 8 slides, to help rebuild the behavior.df.
+  
+#   For parts a through d, paste the R code that you wrote to answer each question as well as the answer/output itself.
+
+#a. In which month were the most number of appointments scheduled (use the SchedDate column). 
+#   You will need to extract the month from the POSIXlt data structure.
+
+#b. In which Department is the No Show rate in the new.outpatient data frame the lowest? 
+
+#c. Which patient(s) has seen the most number of different specialities?
+#   Use the "Dept" variable and include the most recent visit in the count.
+#   How many different specialities did they see and in how many visits? 
+#   (I suggest you modify the "extract.hist" function from slide 26, class 8 adding a new variable Num.Specialties) 
+
+#d. Of those patients that had a prior no-show rate of above 40%, what proportion were men, and what proportion were women? 
+#   Compare this to the sex proportion for all patients, irrespective of no-show rate. 
+#   In the numeric representation of the Sex variable, 1 is Female and 2 Male. 
+
+
+
+# Q3. (16 pts.) Influence of pairs of points on a regression, aka "masking". For loops. 
+# Use the tsla.ret.df data frame which is included in the "hw4_2018.Rdata" file to answer this question.
+# Paste the R code that you write to answer each part as well as the answer itself.
+
+#a. Run the simple regression of the TSLA (y) return against the S&P500 return (x) and report the R-squared from the regression.
+
+#b. Create an empty matrix, populated with NAs,  of size n x n, where n is the number of rows in the TSLA data set. 
+#   Give the matrix both row and column names corresponding to the dates in the Date column of the tsla.ret.df data frame.
+ 
+#c. Remove every possible pair of points in turn from the dataset and rerun the regression each time. 
+#   Every time you rerun the regression
+#   save the new R-squared into the matrix you created in part b. Hint: the subset command to lm will be useful here.
+
+#d. Create a new matrix which calculates the difference between the R-squared you calculated in part a, and the
+#   matrix in part c. Call this matrix "diff.rsquared".  
+
+#e. Which pair of data points' removal makes R-squared decrease the most from the baseline in part a? 
+#   Using the "arr.ind = TRUE, useNames = TRUE" arguments to the "which" function is one approach to this question.
+#   Don't be surprised if the biggest drop in R-squared isn't that much!
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+

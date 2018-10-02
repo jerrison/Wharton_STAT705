@@ -1,8 +1,6 @@
 ## ------------------------------------------------------------------------
 #Read in the datafile (also in the "outpatient.Rdata" file)
-outpatient <- read.csv(
-"C:\\Users\\richardw\\Dropbox (Penn)\\Teaching\\705f2018\\Data\\Outpatient.csv"
-)
+outpatient <- read.csv("/Users/jerrison/Wharton_MBA/Wharton_STAT_705/data/Outpatient.csv")
 #Have a quick look at it
 head(outpatient,5)
 
