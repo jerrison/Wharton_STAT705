@@ -173,7 +173,7 @@ for(k in effort){
 
 return(results.container)
 }
-
+            
 #### We will do some timing too.
 timer.start <- function(name = "Timer 1"){ # A single argument 
   a <- Sys.time() # Save the current time into "a"
