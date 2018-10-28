@@ -1,0 +1,143 @@
+#### STAT 705 Fall 2018 Final Project
+#### NAME:
+
+#### Graded out of 100. 15 points for style and elegance.
+
+#### Deliverables: There are 3 deliverables for this final project.
+#### 1. R code that accompanies Q1 and Q2.
+#### 2. A .RMD file for generating the report in Q3.
+#### 3. The PDF or HTML file of the report that you make for Q3.
+
+
+#### If in a question I refer to a function that we have not seen in class, 
+#### then use the help facility to find out about it.
+#### Insert your answers under each question.
+#### Submit your R code solutions to Canvas as a plain text file.
+
+#### You may use any of the code published in the solutions to Assignment 5. 
+
+
+# Longsvale has undergone rapid development from a 18 block square to 36 blocks.
+# The goal of these questions is to estimate the number of cars (level of effort) that need to be available in order 
+# to meet a pre-specified level of service. We will assume that there are at least as many cars as passengers waiting.
+
+# This pre-specified level of service is that the average wait time for passengers is no longer than 4 minutes.
+
+
+# As a reminder, here is the preamble about the town:
+# Longsvale is an interesting town because it is laid out in a perfect city grid and has exactly 
+# 36 blocks in both the north and east directions. Roads going north-south are called Avenues,
+# and roads east-west are called streets.
+# The driverless car will only pick up and drop people off at street intersections.
+# This means that every car and every passenger's location can be represented as a pair (i,j),
+# i for the street they are on, and j for the avenue, where both i and j take integer values between 1 and 36.
+# The city planners used the convention that the intersection at the south west corner of the grid is (1,1)
+# and the intersection in the north east corner is (36,36).
+
+# The city also operates its time on a very discrete level, only working in minute increments.
+# A car can move one block in one minute.
+
+
+
+#Q1. (41pts.) Write a function called "run.sim", that runs a simulation, where the function takes the following four arguments:
+#    num.cars --- the number of cars initially available.
+#    num.passengers --- the number of passengers initially waiting for a ride.
+#    grid.size --- the size of the Aresville city grid (default to 36).
+#    num.its --- the number of iterations in the Monte Carlo simulation.
+
+# The function should return a one column matrix, with the number of rows equal to num.its. 
+# The elements in this matrix should be the average time that passengers wait to be picked up (where the average
+# is taken over all passengers within an iteration).
+
+# Because grid.size is now a variable you will want to add an extra argument to your "newpassenger" and "newcar" 
+# functions from Assignment 5, to reflect this fact.
+
+# The problem you will face in this question is that in Assignment 5, the number of cars equalled the number of passengers,
+# whereas now that is not necessarily true. If the number of passengers equals the number of cars then the
+# distance matrix is square (the same number of rows as columns).
+# The optimization function, "lp.assign" in fact requires a square matrix as input and will fail to converge otherwise.
+
+# The trick here, when the number of cars does not equal the number of passengers, is to pad the distance matrix
+# with *zeroes* (not NAs), so that it becomes square. If we have cars as rows and passengers as columns in the distance matrix,
+# and there were 20 cars and 10 passengers, then you would need to add 10 columns of 20 rows each to make the distance
+# matrix square. Because these extra columns (phantom passengers) are constructed with all zero entries they don't change
+# the solution to the optimization problem. 
+# Equivalently, you could create a distance matrix as square and full of zeroes, and then just compute the elements
+# that correspond to actual passengers. 
+
+# Bottom line: you have to add in an extra step as compared to Assignment 5, where you ensure that the 
+# distance matrix is square if necessary, before calling "lp.assign".
+
+
+#a. Check all the arguments to make sure that they are non-negative numerics. The functions "stopifnot" and "is.numeric"
+# will help you do this.
+
+#b. The other thing to check, and stop if it is not true,
+# is that the number of cars is greater than or equal to the number of passengers.
+
+#c. Paste the code for your run.sim function. It will implicitly include your answers to parts a and b.
+
+# Run the function with these arguments and report the estimated mean waiting time for each:
+
+#d. run.sim(num.cars = 20, num.passengers  = 20, grid.size = 36, num.its = 100)
+
+#e. run.sim(num.cars = 40, num.passengers  = 20, grid.size = 36, num.its = 100)
+
+#f. run.sim(num.cars = 60, num.passengers  = 20, grid.size = 36, num.its = 100)
+
+
+#Q2. (16 pts.) We now assume that there are 20 passengers waiting, the grid size is 36 and num.its = 1000. 
+#    Explore the average passenger wait time as the 
+#    number of cars varies between 20 and 70 in increments of 5.
+#    As you *develop* your code it will be a good idea to work with a num.its much smaller than 1000,
+#    but the final results should use 1000.
+
+#a. Create an empty container to hold the results of all the simulations.   
+#   This should be a matrix of dimensions num.its by 11.
+#   Provide columns names for this matrix that describe the level of effort associated with each column.
+#   Show the code you used to create this matrix. 
+
+#b. Set the random number seed to your birthday seed and show the code.
+
+#c. Use a for loop to execute the run.sim command as the number of cars varies.
+#   Each pass through the loop should populate one column of the results container.
+#   Show the code that implements the for loop. 
+
+#d. Estimate the mean wait time for each level of effort (number of cars)
+#   and print them below. 
+
+#e. Use the "write.csv" command to save the results container to disk and paste the command 
+#   you used to do it below.
+
+
+
+#Q3. (28 pts.) Using RMarkdown, create a markdown document that summarizes your simulation and render the 
+document as either an HTML or PDF slide presentation.
+
+#a. The document should contain the following elements:
+#   A title slide with a project title, your name, and the date on which the document was rendered (not just created).
+
+#b. A slide that presents the name of the simulation results file and the number of iterations in the simulation 
+#   (calculated after having read in the file that you saved in Q2e, not hardcoded).
+
+#c. A plot that shows level of effort (on the x-axis) against estimated average wait time on the y-axis.
+#   It should also have a horizontal line added at height y = 4, so that an optimal level of effort can 
+#   be visualized. Axes should be labelled appropriately and the plot given a title. The commands "plot" and "abline"
+#   are enough to make the plot. You don't have to use ggplot2, but you can if you want.
+
+#d. A plot that shows the level of effort (on the x-axis) against the 95% percentile of the distribution of the
+#   mean wait time for each level of effort. That is, apply the "quantile" command to the columns of your results matrix and plot the
+#   result. Axes should be labelled appropriately and the plot given a title. 
+
+
+
+
+  
+
+
+
+
+   
+
+
+ 

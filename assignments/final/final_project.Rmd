@@ -1,0 +1,113 @@
+---
+title: "STAT 705 Fall 2018 Final Project"
+author: "Jerrison Li Liu"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output: pdf_document
+---
+
+\newpage
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r read_data, echo=FALSE}
+
+file_path <- paste0("/Users/jerrison/Wharton_MBA/Wharton_STAT_705/",
+                    "assignments/final/",
+                    "wait_times_20_to_70_by_5_with_1000_its.csv")
+
+wait_time_data <- read.csv(file_path, header = T, stringsAsFactors = FALSE)
+
+```
+
+# Analysis Results Filename and Number of Iterations
+
+## Filename
+
+The name of the file with the results from the analysis of average wait time
+is: \newline **`r basename(file_path)`**.
+
+## Number of Iterations in Analysis
+
+The number of iterations for the analysis was **`r nrow(wait_time_data)`**.
+
+\newpage
+
+# Average Wait Time in Minutes vs. Effort (Number of Cars)
+
+```{r part_c, echo=FALSE}
+
+#c. A plot that shows level of effort (on the x-axis) against estimated average
+# wait time on the y-axis.
+#   It should also have a horizontal line added at height y = 4, so that an
+# optimal level of effort can
+#   be visualized. Axes should be labelled appropriately and the plot given a
+# title. The commands "plot" and "abline"
+#   are enough to make the plot. You don't have to use ggplot2, but you can if
+# you want.
+
+library(ggplot2)
+
+mean_wait_time <- (apply(X = wait_time_data, 2, FUN = mean))
+mean_wait_time <-
+    data.frame(cbind(names(mean_wait_time), mean_wait_time), 
+               stringsAsFactors = FALSE)
+colnames(mean_wait_time) <- c("effort", "average_wait_minutes")
+
+# pretty up the effort column
+mean_wait_time$effort <-
+    gsub(pattern = "X",
+         replacement = "",
+         x = mean_wait_time$effort)
+
+
+p1 <-
+    ggplot(data = mean_wait_time, aes(x = effort,
+                                      y = as.numeric(average_wait_minutes))) +
+    geom_bar(stat = "identity") +
+    geom_hline(yintercept = 4, col = "red") +
+    ggtitle("Average Wait Time vs. Effort") +
+    ylab("Average Wait Time (Minutes)") +
+    xlab("Effort (Number of Cars)") +
+    geom_text(x = 9, y = 6, label = "Optimal Level of Effort = 4")
+
+
+p1
+
+```
+
+\newpage
+
+# 95% Wait Time in Minutes vs. Effort (Number of Cars)
+
+```{r part_d, echo=FALSE}
+
+ninety_five_percentile <- apply(X = wait_time_data, 2, FUN = quantile, probs = 0.95)
+ninety_five_percentile <-
+    data.frame(cbind(names(ninety_five_percentile), ninety_five_percentile),
+               stringsAsFactors = FALSE)
+colnames(ninety_five_percentile) <- c("effort", "ninety_five_percentile_wait_minutes")
+
+# pretty up the effort column
+ninety_five_percentile$effort <-
+    gsub(pattern = "X",
+         replacement = "",
+         x = ninety_five_percentile$effort)
+
+p2 <-
+    ggplot(data = ninety_five_percentile, aes(x = effort,
+                                      y = as.numeric(ninety_five_percentile_wait_minutes))) +
+    geom_bar(stat = "identity") +
+    geom_hline(yintercept = 4, col = "red") +
+    ggtitle("95% Percentile Wait Time vs. Effort") +
+    ylab("95% Percentile Wait Time (Minutes)") +
+    xlab("Effort (Number of Cars)") +
+    geom_text(x = 9, y = 6, label = "Optimal Level of Effort = 4")
+
+
+p2
+
+```
+
